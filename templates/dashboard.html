@@ -681,58 +681,5 @@
         </div>
     </div>
 </div>
-
-<!-- Tambahan: ucapan selamat datang (SpeechSynthesis) -->
-<script>
-(function(){
-    const phrase = 'Selamat datang di web Monitoring Hotspot Sleman';
-    let spoken = false;
-
-    function speakPhrase() {
-        if (spoken) return;
-        const synth = window.speechSynthesis;
-        if (!synth) return;
-
-        const utter = new SpeechSynthesisUtterance(phrase);
-        utter.lang = 'id-ID';
-        utter.rate = 1;
-        utter.pitch = 1;
-        utter.volume = 1;
-        utter.onend = () => { spoken = true; };
-
-        // Jika suara tersedia langsung, coba ucapkan.
-        try {
-            // beberapa browser perlu cancel() sebelum speak()
-            synth.cancel();
-            synth.speak(utter);
-            // mark as attempted; if blocked, onend won't fire but we avoid duplicate attempts
-            spoken = true;
-        } catch (err) {
-            // Jika pemutaran otomatis diblokir, tunggu gesture pengguna pertama kali
-            const startOnGesture = () => {
-                if (!spoken) {
-                    try { synth.speak(utter); } catch(e) { /* ignore */ }
-                    spoken = true;
-                }
-                removeListeners();
-            };
-            const removeListeners = () => {
-                window.removeEventListener('click', startOnGesture);
-                window.removeEventListener('keydown', startOnGesture);
-                window.removeEventListener('touchstart', startOnGesture);
-            };
-            window.addEventListener('click', startOnGesture, { once: true });
-            window.addEventListener('keydown', startOnGesture, { once: true });
-            window.addEventListener('touchstart', startOnGesture, { once: true });
-        }
-    }
-
-    // Coba saat halaman siap. Jika diblokir, event listener di atas akan menangani gesture.
-    document.addEventListener('DOMContentLoaded', () => {
-        try { speakPhrase(); } catch(e) { /* ignore */ }
-    });
-})();
-</script>
-
 </body>
 </html>
