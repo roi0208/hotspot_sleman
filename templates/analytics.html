@@ -17,10 +17,17 @@
     
     <style>
         body {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 25%, #e74c3c 50%, #c0392b 75%, #8e44ad 100%);
+            /* Foto sebagai background dan tidak ikut scroll */
+            background-image: url("{{ url_for('static', filename='images/Candi Ijo, Prambanan, Sleman.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* penting: background tetap di tempat saat scroll */
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
+            /* opsional overlay agar teks tetap terbaca — sesuaikan alpha jika terlalu gelap/terang */
+            background-color: rgba(0,0,0,0.18);
+            background-blend-mode: overlay;
         }
         .analytics-container {
             padding: 2rem;
@@ -38,12 +45,13 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
         }
         .card {
-            background: rgba(255, 255, 255, 0.97);
+            background: rgba(255, 255, 255, 0.70);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             padding: 2rem;
             margin-bottom: 2rem;
             border: none;
+            backdrop-filter: blur(20px);
         }
         .card-title {
             font-size: 1.5rem;
