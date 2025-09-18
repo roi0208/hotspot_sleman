@@ -74,8 +74,16 @@ def convert_csv_to_onts_format(csv_data):
 def backup_existing_data():
     """Membuat backup data existing"""
     try:
-        with open('onts.json', 'r', encoding='utf-8') as f:
-            existing_data = json.load(f)
+        try:
+            with open('onts.json', 'r', encoding='utf-8') as f:
+                existing_data = json.load(f)
+        except FileNotFoundError:
+            # Jika onts.json tidak ada, coba ambil dari wifi_sleman.json sebagai fallback
+            try:
+                with open('wifi_sleman.json', 'r', encoding='utf-8') as f:
+                    existing_data = json.load(f)
+            except FileNotFoundError:
+                existing_data = []
         
         timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
         backup_filename = f'onts-backup-before-csv-{timestamp}.json'

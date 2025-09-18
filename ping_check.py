@@ -3,7 +3,13 @@ import time
 import platform
 import subprocess
 import requests 
-import routeros_api
+import os
+try:
+    import routeros_api
+    ROUTEROS_AVAILABLE = True
+except Exception:
+    ROUTEROS_AVAILABLE = False
+    print("⚠️  Warning: 'routeros_api' module not installed — MikroTik features will be disabled.")
 
 MIKROTIK_IP = '111.92.166.184'
 MIKROTIK_PORT = 8728
@@ -35,6 +41,9 @@ def ping(ip):
 # FUNGSI LAMA (TETAP ADA)
 def get_mikrotik_hotspot_active_count():
     """Menghubungkan ke MikroTik via API dan menghitung user aktif."""
+    if not ROUTEROS_AVAILABLE:
+        print("routeros_api not available; skipping MikroTik hotspot count")
+        return None
     try:
         connection = routeros_api.RouterOsApiPool(
             MIKROTIK_IP,
@@ -56,6 +65,9 @@ def get_mikrotik_hotspot_active_count():
 def get_mikrotik_active_users_detail():
     """Menghubungkan ke MikroTik dan mengambil data detail semua user aktif."""
     try:
+        if not ROUTEROS_AVAILABLE:
+            print("routeros_api not available; skipping MikroTik active users detail")
+            return None
         print(f"Mengambil detail user dari MikroTik di {MIKROTIK_IP}:{MIKROTIK_PORT}...")
         connection = routeros_api.RouterOsApiPool(
             MIKROTIK_IP,
@@ -89,27 +101,55 @@ def get_mikrotik_active_users_detail():
 
 # FUNGSI LAMA (TETAP ADA)
 def update_ont_statuses():
-    """Melakukan ping ke semua ONT dan mengupdate statusnya di onts.json."""
+    """Melakukan ping ke semua ONT dan mengupdate statusnya.
+
+    Untuk monitoring, ambil data sumber dari `onts.json` (read-only).
+    Perubahan status tidak disimpan kembali ke file sumber untuk menghindari
+    menimpa data master; jika diperlukan, perubahan tetap bisa ditulis ke
+    `onts.json` atau file lain secara eksplisit.
+    """
     try:
-        with open("onts.json", "r+", encoding='utf-8') as f:
+        # Baca dari wifi_sleman.json sebagai sumber IP untuk pengecekan
+        with open("wifi_sleman.json", "r", encoding='utf-8') as f:
             onts = json.load(f)
-            print(f"Memulai ping ke {len(onts)} ONT...")
-            for ont in onts:
-                ip = ont.get('ip', '')
-                if not ip: continue
-                if ping(ip):
-                    ont['status'] = "ON"
-                    ont['rto_count'] = 0
-                    ont['last_on'] = time.strftime('%Y-%m-%dT%H:%M:%S')
-                else:
-                    ont['rto_count'] = ont.get('rto_count', 0) + 1
-                    if ont['rto_count'] == 1: ont['status'] = "OFF(Waiting Connection)"
-                    elif 2 <= ont['rto_count'] <= 5: ont['status'] = "OFF(RTO)"
-                    else: ont['status'] = "OFF"
-            f.seek(0)
-            json.dump(onts, f, indent=2, ensure_ascii=False)
-            f.truncate()
-        print("Status ONT berhasil diperbarui di onts.json.")
+
+        print(f"Memulai ping ke {len(onts)} ONT...")
+        updated = []
+        for ont in onts:
+            ip = ont.get('ip', '').strip()
+            if not ip:
+                updated.append({**ont, 'status': 'UNKNOWN'})
+                continue
+            if ping(ip):
+                updated.append({**ont, 'status': 'ON'})
+            else:
+                updated.append({**ont, 'status': 'OFF'})
+
+        # Hanya laporkan hasil (tidak menimpa file master `onts.json`)
+        print("Hasil pengecekan (sample 5):", updated[:5])
+
+        # Tulis cache status agar web app dapat menggabungkan status terbaru
+        try:
+            status_cache = []
+            for item in updated:
+                status_cache.append({
+                    'id': item.get('id'),
+                    'ip': item.get('ip'),
+                    'status': item.get('status')
+                })
+            # atomic write
+            tmp = '.tmp-status_cache.json'
+            with open(tmp, 'w', encoding='utf-8') as tf:
+                json.dump(status_cache, tf, indent=2, ensure_ascii=False)
+                tf.flush()
+                try:
+                    os.fsync(tf.fileno())
+                except Exception:
+                    pass
+            os.replace(tmp, 'status_cache.json')
+            print(f"Status cache written ({len(status_cache)} entries) to status_cache.json")
+        except Exception as e:
+            print(f"Gagal menulis status_cache.json: {e}")
     except Exception as e:
         print(f"Error saat memperbarui status ONT: {e}")
 

@@ -76,8 +76,8 @@ def test_ont_ips():
     try:
         import json
         
-        # Baca file onts.json
-        with open("onts.json", "r", encoding='utf-8') as f:
+        # Baca file sumber IP: wifi_sleman.json
+        with open("wifi_sleman.json", "r", encoding='utf-8') as f:
             onts = json.load(f)
         
         print(f"📋 Ditemukan {len(onts)} ONT")
@@ -98,9 +98,9 @@ def test_ont_ips():
                 print(f"⚠️  {name}: IP kosong, skip")
                 
     except FileNotFoundError:
-        print("❌ File onts.json tidak ditemukan")
+        print("❌ File wifi_sleman.json tidak ditemukan")
     except json.JSONDecodeError:
-        print("❌ File onts.json tidak valid")
+        print("❌ File wifi_sleman.json tidak valid")
     except Exception as e:
         print(f"❌ Error: {e}")
 

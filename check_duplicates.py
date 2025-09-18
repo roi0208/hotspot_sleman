@@ -9,8 +9,8 @@ from collections import defaultdict
 def load_onts_data():
     """Memuat data dari onts.json"""
     try:
-        with open('onts.json', 'r', encoding='utf-8') as f:
-            return json.load(f)
+            with open('wifi_sleman.json', 'r', encoding='utf-8') as f:
+                return json.load(f)
     except FileNotFoundError:
         print("File onts.json tidak ditemukan")
         return []

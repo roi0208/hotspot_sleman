@@ -113,8 +113,12 @@ def main():
     print("=== Merge Data ONT ===\n")
     
     # Load data yang sudah ada
-    print("1. Memuat data existing dari onts.json...")
+    print("1. Memuat data existing dari onts.json (atau wifi_sleman.json jika tidak ada)...")
     existing_data = load_json_file('onts.json')
+    if not existing_data:
+        existing_data = load_json_file('wifi_sleman.json')
+        if not existing_data:
+            existing_data = []
     print(f"   Data existing: {len(existing_data)} item")
     
     # Load data dari CSV

@@ -21,11 +21,73 @@ USER_LOG_FILE = 'user_log.json'
 
 
 def load_data():
+    # Membaca data ONT dari `wifi_sleman.json` sebagai sumber utama untuk monitoring.
+    # Jika file tersebut tidak ada atau corrupt, fallback ke DATA_FILE (onts.json).
     try:
-        with open(DATA_FILE, 'r') as f:
-            return json.load(f)
+        with open('wifi_sleman.json', 'r') as f:
+            base = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return []
+        try:
+            with open(DATA_FILE, 'r') as f:
+                base = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            base = []
+
+    # Jika ada cache status yang dibuat oleh skrip monitoring, gabungkan ke data
+    try:
+        with open('status_cache.json', 'r') as sf:
+            status_cache = json.load(sf)
+            # status_cache diharapkan berupa list atau dict; normalisasi ke dict by id/ip
+            status_map = {}
+            if isinstance(status_cache, list):
+                for item in status_cache:
+                    key = item.get('id') or item.get('ip')
+                    if key is not None:
+                        status_map[str(key)] = item.get('status')
+            elif isinstance(status_cache, dict):
+                # langsung mapping id/ip -> status
+                for k, v in status_cache.items():
+                    status_map[str(k)] = v
+
+            # terapkan status ke base
+            for ont in base:
+                # coba mencocokkan berdasarkan id terlebih dulu, lalu ip
+                ont_id = ont.get('id')
+                ont_ip = ont.get('ip')
+                if ont_id is not None and str(ont_id) in status_map:
+                    ont['status'] = status_map[str(ont_id)]
+                elif ont_ip and str(ont_ip) in status_map:
+                    ont['status'] = status_map[str(ont_ip)]
+                else:
+                    # pastikan ada field status default
+                    ont.setdefault('status', 'UNKNOWN')
+    except (FileNotFoundError, json.JSONDecodeError):
+        # tidak ada cache status, pastikan setiap entri memiliki field status
+        for ont in base:
+            ont.setdefault('status', 'UNKNOWN')
+
+    # Normalisasi koordinat: pastikan latitude/longitude adalah float atau None
+    for ont in base:
+        lat = ont.get('latitude')
+        lon = ont.get('longitude')
+        try:
+            if lat is None or lat == "":
+                ont['latitude'] = None
+            else:
+                ont['latitude'] = float(str(lat).strip())
+        except Exception:
+            ont['latitude'] = None
+        try:
+            if lon is None or lon == "":
+                ont['longitude'] = None
+            else:
+                ont['longitude'] = float(str(lon).strip())
+        except Exception:
+            ont['longitude'] = None
+
+    # Filter out entries without valid coordinates when needed by the UI
+    return base
+
 
 # --- SEMUA FUNGSI LAMA ANDA TETAP DI SINI (TIDAK ADA YANG DIHAPUS) ---
 

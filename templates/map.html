@@ -416,7 +416,13 @@
       }
       function renderMarkers(onts) {
         markers.clearLayers();
+        let skipped = 0;
         onts.forEach((ont) => {
+          // Lewati ONT tanpa koordinat valid
+          if (typeof ont.latitude !== 'number' || typeof ont.longitude !== 'number' || isNaN(ont.latitude) || isNaN(ont.longitude)) {
+            skipped++;
+            return;
+          }
           let onColor, offColor;
           if (ont.Icon === 119) {
             onColor = "#3498db";
@@ -463,6 +469,7 @@
           lastStatus[ont.id] = isOnline;
         });
         map.addLayer(markers);
+        if (skipped > 0) console.warn(`Skipped ${skipped} ONT(s) without valid coordinates`);
       }
       function loadAllData() {
         fetch("/api/onts")
@@ -470,7 +477,7 @@
           .then((data) => {
             allOntData = data;
             updateStats(data);
-            renderMarkers(data);
+            renderMarkers(data.filter(ont => typeof ont.latitude === 'number' && typeof ont.longitude === 'number'));
             if (isFirstLoad && data.length > 0) {
               const coordinates = data.map((ont) => [
                 ont.latitude,
@@ -529,10 +536,8 @@ L.Control.LegendCustom = L.Control.extend({
         div.innerHTML = `
             <div style="font-size:12px; line-height:1.4;">
                 <b>Legenda</b><br>
-                <span style="color:#27ae60;">●</span> CSR Online<br>
-                <span style="color:#ff6b35;">●</span> CSR Offline<br>
-                <span style="color:#3498db;">●</span> APBD Online<br>
-                <span style="color:#e74c3c;">●</span> APBD Offline
+                <span style="color:#27ae60;">●</span> ONT Online<br>
+                <span style="color:#ff6b35;">●</span> ONT Offline<br>
             </div>
         `;
         return div;
