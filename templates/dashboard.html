@@ -19,7 +19,7 @@
         :root {
             --primary-color: #5e5ce6;
             --secondary-color: #007aff;
-            --accent-color: #ff6b35; /* Tetap dipertahankan untuk kontras */
+            --accent-color: #ff6b35; 
             --text-light: #f5f5f7;
             --text-dark: #1d1d1f;
             --card-bg: rgba(255, 255, 255, 0.55);
@@ -36,7 +36,7 @@
             background-attachment: fixed;
             min-height: 100vh;
             font-family: 'Poppins', sans-serif;
-            background-color: rgba(10, 25, 47, 0.6); /* Overlay lebih gelap */
+            background-color: rgba(10, 25, 47, 0.6);
             background-blend-mode: overlay;
             color: var(--text-dark);
         }
@@ -62,7 +62,7 @@
         .header h1 i { color: #bfbaff; margin-right: 10px; }
         .header p { font-size: 1.2rem; opacity: 0.9; }
 
-        /* === ENHANCED "GLASSMORPHISM" CARDS === */
+        /* === "GLASSMORPHISM" CARDS === */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -142,11 +142,10 @@
             border-radius: 12px;
             color: #fff;
         }
-        /* Memberi warna unik untuk setiap ikon statistik */
-        .stat-card:nth-child(1) .stat-icon { background-color: #007aff; } /* Total */
-        .stat-card:nth-child(2) .stat-icon { background-color: #34c759; } /* Online */
-        .stat-card:nth-child(3) .stat-icon { background-color: #ff3b30; } /* Offline */
-        .stat-card:nth-child(4) .stat-icon { background-color: #ff9500; } /* Users */
+        .stat-card:nth-child(1) .stat-icon { background-color: #007aff; }
+        .stat-card:nth-child(2) .stat-icon { background-color: #34c759; }
+        .stat-card:nth-child(3) .stat-icon { background-color: #ff3b30; }
+        .stat-card:nth-child(4) .stat-icon { background-color: #ff9500; }
         .stat-details { text-align: left; }
         .stat-number { font-size: 2.2rem; font-weight: 700; color: var(--text-dark); line-height: 1; }
         .stat-label { color: #6c757d; font-size: 0.9rem; font-weight: 500; }
@@ -164,48 +163,44 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem; /* Menambah ruang untuk sumbu Y sticky */
         }
         .chart-header h2 {
             color: var(--text-dark);
             font-weight: 600;
             font-size: 1.4rem;
         }
+        
+        /* === STICKY AXIS STYLES (BARU) === */
+        .chart-sticky-container {
+            position: relative;
+        }
+        .sticky-y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95); /* Sama dengan latar chart */
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-right: 10px;
+        }
+        .sticky-y-axis-label {
+            color: #6c757d; /* Warna dari label chart */
+            font-size: 12px; /* Ukuran dari label chart */
+            font-family: 'Poppins', sans-serif;
+            text-align: right;
+        }
+        .chart-wrapper {
+            overflow-x: auto;
+            /* Tambahkan margin kiri untuk memberi ruang bagi sumbu Y sticky */
+        }
         .chart-canvas-container { height: 350px; }
 
-        /* === TIPS SECTION === */
-        .tips-section {
-            background: var(--glass-bg);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid var(--card-border);
-            border-left: 5px solid var(--primary-color);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-top: 3rem;
-            color: var(--text-light);
-            animation: slideUp 1.2s ease-out;
-        }
-        .tips-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; }
-        .tips-list { list-style: none; padding-left: 0; }
-        .tip-item { padding: 0.4rem 0; }
-        .tip-item::before { content: "💡"; margin-right: 0.8rem; }
-        
-        /* === MODAL === */
-        .modal-content { border-radius: 15px; border: none; }
-        .modal-header {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-        }
-        .modal-body p { color: #555; }
-        
-        /* === ANIMATIONS (Tetap sama) === */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* Sisa style tetap sama */
+        .tips-section{background:var(--glass-bg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--card-border);border-left:5px solid var(--primary-color);border-radius:15px;padding:2rem;margin-top:3rem;color:var(--text-light);animation:slideUp 1.2s ease-out}.tips-title{font-size:1.3rem;font-weight:600;margin-bottom:1rem}.tips-list{list-style:none;padding-left:0}.tip-item{padding:.4rem 0}.tip-item::before{content:"💡";margin-right:.8rem}.modal-content{border-radius:15px;border:none}.modal-header{background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#fff;border-top-left-radius:15px;border-top-right-radius:15px}.modal-body p{color:#555}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 
     </style>
 </head>
@@ -263,9 +258,11 @@
                         <a href="/analytics" class="btn btn-info btn-sm text-white"><i class="fas fa-chart-pie"></i> Analitik</a>
                     </div>
                 </div>
-                <div class="chart-wrapper" style="overflow-x: auto;">
-                    <div class="chart-canvas-container">
-                        <canvas id="userHistoryChart"></canvas>
+                <div class="chart-sticky-container">
+                    <div class="chart-wrapper">
+                        <div class="chart-canvas-container">
+                            <canvas id="userHistoryChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -306,11 +303,55 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // === SEMUA FUNGSI JAVASCRIPT ANDA TETAP SAMA ===
-        // Tidak ada perubahan logika, hanya perubahan pada konfigurasi chart untuk menyesuaikan tema.
         let userHistoryLineChart;
 
-        function loadStats() {
+        // === FUNGSI BARU UNTUK MEMBUAT SUMBU Y STICKY ===
+        function createStickyYAxis(chart) {
+            const stickyContainer = document.querySelector('.chart-sticky-container');
+            
+            // Hapus sumbu Y lama jika ada untuk pembaruan
+            const oldAxis = stickyContainer.querySelector('.sticky-y-axis');
+            if (oldAxis) oldAxis.remove();
+
+            // Buat elemen untuk sumbu Y sticky
+            const yAxisEl = document.createElement('div');
+            yAxisEl.className = 'sticky-y-axis';
+
+            // Ambil data dan posisi dari chart yang sudah ada
+            const yTicks = chart.scales.y.ticks;
+            const chartArea = chart.chartArea;
+
+            // Atur lebar sumbu Y sticky sama dengan sumbu Y asli
+            const yAxisWidth = chart.scales.y.width;
+            yAxisEl.style.width = `${yAxisWidth}px`;
+            
+            // Beri margin pada wrapper chart agar tidak tertutup sumbu Y sticky
+            document.querySelector('.chart-wrapper').style.marginLeft = `${yAxisWidth}px`;
+
+            // Buat label untuk setiap angka di sumbu Y
+            yTicks.forEach((tick, index) => {
+                const label = document.createElement('div');
+                label.className = 'sticky-y-axis-label';
+                label.textContent = tick.label;
+                
+                // Posisikan label secara absolut berdasarkan posisi piksel dari Chart.js
+                const tickPixelY = chart.scales.y.getPixelForTick(index);
+                label.style.position = 'absolute';
+                label.style.top = `${tickPixelY}px`;
+                label.style.right = '10px'; // Beri sedikit jarak dari tepi
+                label.style.transform = 'translateY(-50%)'; // Center vertikal
+                yAxisEl.appendChild(label);
+            });
+
+            // Tambahkan sumbu Y sticky ke kontainer
+            stickyContainer.prepend(yAxisEl);
+
+            // Sembunyikan sumbu Y asli pada chart utama
+            chart.options.scales.y.ticks.display = false;
+            chart.update();
+        }
+
+        function loadStats() { /* Fungsi ini tetap sama */
             fetch('/api/onts').then(res => res.json()).then(data => {
                 document.getElementById('total-onts').textContent = data.length;
                 const onlineCount = data.filter(ont => ont.status === 'ON').length;
@@ -339,7 +380,7 @@
             let padding = range * 0.1;
             if (padding === 0) { padding = 5; }
             chart.options.scales.y.min = Math.floor(minValue - padding);
-            if (chart.options.scales.y.min < 0) chart.options.scales.y.min = 0; // Pastikan tidak di bawah 0
+            if (chart.options.scales.y.min < 0) chart.options.scales.y.min = 0;
             chart.options.scales.y.max = Math.ceil(maxValue + padding);
         }
 
@@ -365,7 +406,7 @@
             });
         }
         
-        function addDataToChart(label, userData, fullTimestamp) { /* Fungsi ini tetap sama */
+        function addDataToChart(label, userData, fullTimestamp) {
             const chart = userHistoryLineChart;
             if (label !== null) {
                 chart.data.labels.push(label);
@@ -380,6 +421,10 @@
                 canvasContainer.style.width = `${600 + (dataCount - minVisibleData) * 50}px`;
             }
             chart.update();
+            
+            // Panggil fungsi sticky axis lagi setiap kali chart diperbarui
+            createStickyYAxis(chart); 
+            
             const chartWrapper = document.querySelector('.chart-wrapper');
             chartWrapper.scrollLeft = chartWrapper.scrollWidth;
         }
@@ -389,18 +434,16 @@
             const userData = initialData.map(d => d.users);
             const fullTimestamps = initialData.map(d => d.timestamp);
             
-            // --- Chart Plugin dengan warna baru yang sesuai tema ---
-            const verticalDayBands = {
+            const verticalDayBands = { /* Plugin ini tetap sama */
                 id: 'verticalDayBands',
                 beforeDraw(chart) {
                     const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
                     const timestamps = chart.config.options.fullTimestamps;
                     if (!timestamps || timestamps.length === 0) return;
-
-                    const dayColors = ['rgba(230, 230, 255, 0.2)', 'transparent']; // Warna baru
+                    const dayColors = ['rgba(230, 230, 255, 0.2)', 'transparent'];
+                    if (timestamps.length === 0) return;
                     let lastDateStr = new Date(timestamps[0]).toDateString();
                     let colorIndex = 0;
-
                     for (let i = 1; i < timestamps.length; i++) {
                         const currentDateStr = new Date(timestamps[i]).toDateString();
                         if (currentDateStr !== lastDateStr) {
@@ -425,12 +468,11 @@
                     datasets: [{
                         label: 'Jumlah User Aktif',
                         data: userData,
-                        // --- Warna baru untuk grafik ---
                         backgroundColor: 'rgba(94, 92, 230, 0.2)',
                         borderColor: 'rgba(94, 92, 230, 1)',
                         borderWidth: 2.5,
                         fill: true,
-                        tension: 0.4, // Kurva lebih halus
+                        tension: 0.4,
                         pointBackgroundColor: 'rgba(94, 92, 230, 1)',
                         pointRadius: 0,
                         pointHoverRadius: 5
@@ -444,7 +486,11 @@
                         y: { 
                             title: { display: false },
                             grid: { color: 'rgba(0,0,0,0.05)' },
-                            ticks: { font: { family: 'Poppins' } }
+                            ticks: { 
+                                font: { family: 'Poppins' },
+                                // Tampilkan sumbu Y asli saat pertama kali render untuk dibaca oleh fungsi sticky
+                                display: true 
+                            }
                         },
                         x: {
                             grid: { display: false },
@@ -460,10 +506,17 @@
                         }
                     }
                 },
-                plugins: [verticalDayBands] // Aktifkan plugin
+                plugins: [verticalDayBands]
             });
 
-            addDataToChart(null, null, null); // Panggil untuk set initial scroll & size
+            // Panggil fungsi untuk membuat sumbu Y sticky setelah chart pertama kali dibuat
+            // Timeout kecil untuk memastikan chart selesai render sebelum dibaca
+            setTimeout(() => {
+                updateChartScale(userHistoryLineChart);
+                userHistoryLineChart.update();
+                createStickyYAxis(userHistoryLineChart);
+                addDataToChart(null, null, null);
+            }, 100);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
