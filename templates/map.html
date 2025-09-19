@@ -14,10 +14,9 @@
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-
     <link
       rel="icon"
       type="image/png"
@@ -25,18 +24,34 @@
     />
 
     <style>
+      /* === PALET WARNA KONSISTEN (Diperbarui) === */
+      :root {
+        --primary-color: #3B82F6; /* Biru seperti dashboard */
+        --secondary-color: #1F2937; /* Warna gelap untuk header jika diperlukan */
+        --background-color: #F3F4F6;
+        --card-bg-color: #FFFFFF;
+        --text-dark: #111827;
+        --text-light: #6B7280;
+        --border-color: #E5E7EB;
+        --success-color: #10B981; /* Hijau untuk online */
+        --danger-color: #EF4444; /* Merah untuk offline/bahaya */
+        --warning-color: #F59E0B;
+        --info-color: #3498db; /* Biru terang */
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+
       .leaflet-control-custom {
-        background-color: #ffffff;
+        background-color: var(--card-bg-color);
         padding: 10px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        border: 1px solid #e0e0e0;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
       }
       body {
-        font-family: "Roboto", sans-serif;
-        background: #f8f9fb;
+        font-family: "Poppins", sans-serif; /* Mengubah ke Poppins */
+        background: var(--background-color);
         margin: 0;
-        color: #333;
+        color: var(--text-dark);
         overflow: hidden;
       }
 
@@ -44,7 +59,7 @@
       #map {
         height: 100vh;
         width: 100%;
-        background-color: #f0f0f0;
+        background-color: var(--background-color);
         padding-left: 350px;
         transition: padding-left 0.35s ease-in-out;
         box-sizing: border-box;
@@ -60,12 +75,12 @@
         left: 0;
         width: 350px;
         height: 100vh;
-        background: #ffffff;
+        background: var(--card-bg-color);
         z-index: 1001;
         box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
-        border-right: 1px solid #e0e0e0;
+        border-right: 1px solid var(--border-color);
         transform: translateX(0);
         transition: transform 0.35s ease-in-out;
       }
@@ -80,12 +95,12 @@
         left: 50%;
         transform: translateX(-50%);
         z-index: 1002;
-        background: #ffffff;
-        color: #555;
+        background: var(--card-bg-color);
+        color: var(--text-light);
         padding: 12px 25px;
         border-radius: 50px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border: 1px solid #e0e0e0;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
         display: flex;
         align-items: center;
         gap: 10px;
@@ -93,8 +108,8 @@
       .top-header h1 {
         margin: 0;
         font-size: 1.2rem;
-        font-weight: 500;
-        color: #ff6b35;
+        font-weight: 600;
+        color: var(--primary-color); /* Diubah ke biru */
       }
       .top-header .header-info {
         display: flex;
@@ -109,29 +124,29 @@
       }
       .top-header .info-item i {
         font-size: 1rem;
-        color: #aaa;
+        color: var(--text-light);
       }
       .top-header .info-item .label {
         font-size: 0.8rem;
-        color: #888;
+        color: var(--text-light);
         font-weight: 400;
         text-transform: uppercase;
       }
       .top-header .info-item .value {
         font-size: 1rem;
         font-weight: 700;
-        color: #333;
+        color: var(--text-dark);
       }
       .top-header .status-indicator {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
       }
       .top-header .status-indicator.online {
-          background-color: #27ae60;
+        background-color: var(--success-color);
       }
       .top-header .status-indicator.offline {
-          background-color: #e74c3c;
+        background-color: var(--danger-color);
       }
       /* Akhir Perubahan CSS Header */
 
@@ -143,8 +158,8 @@
         transform: translateY(-50%);
         width: 25px;
         height: 80px;
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
+        background-color: var(--card-bg-color);
+        border: 1px solid var(--border-color);
         border-left: none;
         border-radius: 0 10px 10px 0;
         z-index: 1002;
@@ -153,13 +168,14 @@
         align-items: center;
         justify-content: center;
         font-size: 1.2rem;
-        color: #555;
+        color: var(--text-dark);
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         transition: left 0.35s ease-in-out, background-color 0.2s, color 0.2s;
       }
       #toggle-sidebar-btn:hover {
-        background-color: #ff6b35;
+        background-color: var(--primary-color); /* Diubah ke biru */
         color: white;
+        border-color: var(--primary-color);
       }
       body.sidebar-collapsed #toggle-sidebar-btn {
         left: 0;
@@ -171,26 +187,26 @@
         transform: rotate(180deg);
       }
 
-      /* Sisa CSS Anda (tidak diubah) */
+      /* Sisa CSS Anda */
       .panel-header {
         padding: 20px;
         text-align: center;
-        border-bottom: 1px solid #e0e0e0;
+        border-bottom: 1px solid var(--border-color);
       }
       .panel-header h1 {
         font-size: 1.8rem;
         margin: 0;
-        color: #ff6b35;
+        color: var(--primary-color); /* Diubah ke biru */
       }
       .stats-overview {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 15px;
         padding: 20px;
-        border-bottom: 1px solid #e0e0e0;
+        border-bottom: 1px solid var(--border-color);
       }
       .stat-box {
-        background: #f8f9fa;
+        background: var(--background-color);
         border-radius: 8px;
         padding: 15px;
         text-align: center;
@@ -201,31 +217,31 @@
       }
       .stat-box .label {
         font-size: 0.9rem;
-        color: #6c757d;
+        color: var(--text-light);
       }
       #stat-online .value {
-        color: #27ae60;
+        color: var(--success-color);
       }
       #stat-offline .value {
-        color: #e74c3c;
+        color: var(--danger-color); /* Konsisten dengan danger-color */
       }
       #stat-total .value {
-        color: #3498db;
+        color: var(--info-color);
       }
       #stat-users .value {
-        color: #f39c12;
+        color: var(--warning-color);
       }
       .search-filter {
         padding: 20px;
-        border-bottom: 1px solid #e0e0e0;
+        border-bottom: 1px solid var(--border-color);
       }
       .search-filter input {
         width: 89%;
-        background: #fff;
-        border: 1px solid #ccc;
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
         border-radius: 5px;
         padding: 10px;
-        color: #333;
+        color: var(--text-dark);
         font-size: 1rem;
       }
       .offline-list-container {
@@ -236,11 +252,16 @@
       .offline-list-container h3 {
         margin-top: 20px;
         font-size: 1.2rem;
-        color: #e74c3c;
+        color: var(--danger-color); /* Konsisten dengan danger-color */
       }
       .offline-list-item {
-        background: rgba(231, 76, 60, 0.1);
-        border-left: 3px solid #e74c3c;
+        background: rgba(
+          239,
+          68,
+          68,
+          0.1
+        ); /* Menggunakan alpha dari danger-color */
+        border-left: 3px solid var(--danger-color); /* Konsisten dengan danger-color */
         padding: 10px;
         margin-bottom: 8px;
         border-radius: 5px;
@@ -248,14 +269,19 @@
         transition: background 0.2s ease;
       }
       .offline-list-item:hover {
-        background: rgba(231, 76, 60, 0.2);
+        background: rgba(
+          239,
+          68,
+          68,
+          0.2
+        ); /* Menggunakan alpha dari danger-color */
       }
       .offline-list-item .name {
         font-weight: 500;
       }
       .offline-list-item .location {
         font-size: 0.85rem;
-        color: #6c757d;
+        color: var(--text-light);
       }
       .top-nav {
         position: fixed;
@@ -266,9 +292,9 @@
         gap: 15px;
       }
       .nav-btn {
-        background: #ffffff;
-        border: 1px solid #e0e0e0;
-        color: #555;
+        background: var(--card-bg-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-light);
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -278,18 +304,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow);
       }
       .nav-btn:hover {
-        background: #ff6b35;
+        background: var(--primary-color); /* Diubah ke biru */
         color: white;
-        border-color: #ff6b35;
+        border-color: var(--primary-color);
       }
       .nav-btn .badge {
         position: absolute;
         top: -5px;
         right: -5px;
-        background: #e74c3c;
+        background: var(--danger-color); /* Konsisten dengan danger-color */
         color: white;
         border-radius: 50%;
         width: 20px;
@@ -417,280 +443,274 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 
     <script>
-  // SCRIPT BAWAAN ANDA DIMULAI DI SINI
-  const map = L.map("map").setView([-7.797068, 110.370529], 10);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 20,
-  }).addTo(map);
+      // SCRIPT BAWAAN ANDA DIMULAI DI SINI
+      const map = L.map("map").setView([-7.797068, 110.370529], 9);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 20,
+      }).addTo(map);
 
-  let allOntData = [];
-  let markers = L.layerGroup();
-  let lastStatus = {};
-  let isFirstLoad = true;
+      let allOntData = [];
+      let markers = L.layerGroup();
+      let lastStatus = {};
+      let isFirstLoad = true;
 
-  // --- NEW: kontrol auto-fit untuk mencegah override setelah user interaksi ---
-  let autoFitEnabled = true;
-  const AUTO_FIT_DISABLE_MS = 60000; // nonaktifkan auto-fit sementara 60 detik setelah interaksi
-  let autoFitTimer = null;
+      // --- NEW: kontrol auto-fit untuk mencegah override setelah user interaksi ---
+      let autoFitEnabled = true;
+      const AUTO_FIT_DISABLE_MS = 60000; // nonaktifkan auto-fit sementara 60 detik setelah interaksi
+      let autoFitTimer = null;
 
-  function disableAutoFitTemporarily(ms = AUTO_FIT_DISABLE_MS) {
-    autoFitEnabled = false;
-    if (autoFitTimer) clearTimeout(autoFitTimer);
-    autoFitTimer = setTimeout(() => {
-      autoFitEnabled = true;
-      autoFitTimer = null;
-    }, ms);
-  }
+      function disableAutoFitTemporarily(ms = AUTO_FIT_DISABLE_MS) {
+        autoFitEnabled = false;
+        if (autoFitTimer) clearTimeout(autoFitTimer);
+        autoFitTimer = setTimeout(() => {
+          autoFitEnabled = true;
+          autoFitTimer = null;
+        }, ms);
+      }
 
-  // jika user mulai melakukan interaksi dengan peta, suppress auto-fit sementara
-  map.on("movestart zoomstart dragstart", function () {
-    disableAutoFitTemporarily();
-  });
-
-  // Fungsi untuk mengupdate info status di header
-  function updateHeaderInfo(onts) {
-    const totalOnline = onts.filter((ont) => ont.status.startsWith("ON")).length;
-    const totalOnts = onts.length;
-    const onlinePercentage = totalOnts > 0 ? ((totalOnline / totalOnts) * 100).toFixed(0) : 0;
-
-    const ontStatusElement = document.getElementById("header-ont-status");
-    ontStatusElement.innerHTML = `${onlinePercentage}%`;
-    ontStatusElement.style.color = totalOnline === totalOnts ? '#27ae60' : '#e74c3c';
-  }
-
-  function updateStats(onts) {
-    const total = onts.length;
-    const online = onts.filter((ont) => ont.status.startsWith("ON")).length;
-    const offline = total - online;
-
-    document.getElementById("stat-total").querySelector(".value").textContent = total;
-    document.getElementById("stat-online").querySelector(".value").textContent = online;
-    document.getElementById("stat-offline").querySelector(".value").textContent = offline;
-
-    updateHeaderInfo(onts); // Panggil fungsi baru
-
-    const offlineList = document.getElementById("offline-list");
-    const offlineOnts = onts.filter((ont) => !ont.status.startsWith("ON"));
-    offlineList.innerHTML = "";
-    if (offlineOnts.length > 0) {
-      offlineOnts.forEach((ont) => {
-        const item = document.createElement("div");
-        item.className = "offline-list-item";
-        item.innerHTML = `<div class="name">${ont.name}</div><div class="location">${ont.lokasi || ""}</div>`;
-        item.onclick = () => {
-          map.setView([ont.latitude, ont.longitude], 18);
-          // treat as user interaction (suppress auto-fit temporarily)
-          disableAutoFitTemporarily();
-        };
-        offlineList.appendChild(item);
+      // jika user mulai melakukan interaksi dengan peta, suppress auto-fit sementara
+      map.on("movestart zoomstart dragstart", function () {
+        disableAutoFitTemporarily();
       });
-    } else {
-      offlineList.innerHTML = '<p style="color: #aaa; text-align: center; margin-top: 20px;">Semua perangkat online.</p>';
-    }
-  }
 
-  function getMikrotikUserCount() {
-    fetch("/api/history")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length > 0) {
-          const userCount = data[data.length - 1].users;
-          document.getElementById("stat-users").querySelector(".value").textContent = userCount;
-          document.getElementById("header-users-count").textContent = userCount;
+      // Fungsi untuk mengupdate info status di header
+      function updateHeaderInfo(onts) {
+        const totalOnline = onts.filter((ont) => ont.status.startsWith("ON")).length;
+        const totalOnts = onts.length;
+        const onlinePercentage = totalOnts > 0 ? ((totalOnline / totalOnts) * 100).toFixed(0) : 0;
+
+        const ontStatusElement = document.getElementById("header-ont-status");
+        ontStatusElement.innerHTML = `${onlinePercentage}%`;
+        ontStatusElement.style.color = totalOnline === totalOnts ? 'var(--success-color)' : 'var(--danger-color)'; /* Diubah ke variabel CSS */
+      }
+
+      function updateStats(onts) {
+        const total = onts.length;
+        const online = onts.filter((ont) => ont.status.startsWith("ON")).length;
+        const offline = total - online;
+
+        document.getElementById("stat-total").querySelector(".value").textContent = total;
+        document.getElementById("stat-online").querySelector(".value").textContent = online;
+        document.getElementById("stat-offline").querySelector(".value").textContent = offline;
+
+        updateHeaderInfo(onts); // Panggil fungsi baru
+
+        const offlineList = document.getElementById("offline-list");
+        const offlineOnts = onts.filter((ont) => !ont.status.startsWith("ON"));
+        offlineList.innerHTML = "";
+        if (offlineOnts.length > 0) {
+          offlineOnts.forEach((ont) => {
+            const item = document.createElement("div");
+            item.className = "offline-list-item";
+            item.innerHTML = `<div class="name">${ont.name}</div><div class="location">${ont.lokasi || ""}</div>`;
+            item.onclick = () => {
+              map.setView([ont.latitude, ont.longitude], 18);
+              // treat as user interaction (suppress auto-fit temporarily)
+              disableAutoFitTemporarily();
+            };
+            offlineList.appendChild(item);
+          });
         } else {
-          document.getElementById("stat-users").querySelector(".value").textContent = "0";
-          document.getElementById("header-users-count").textContent = "0";
+          offlineList.innerHTML = '<p style="color: #aaa; text-align: center; margin-top: 20px;">Semua perangkat online.</p>';
         }
-      })
-      .catch(err => {
-        console.error('Error fetching history:', err);
-      });
-  }
-
-  function applySonarEffect(marker, color) {
-    const iconDiv = marker._icon;
-    if (iconDiv) {
-      iconDiv.style.color = color;
-      iconDiv.classList.add("sonar-ping-emitter");
-      setTimeout(() => {
-        if (iconDiv) iconDiv.classList.remove("sonar-ping-emitter");
-      }, 3000);
-    }
-  }
-
-  function renderMarkers(onts) {
-    markers.clearLayers();
-    let skipped = 0;
-    onts.forEach((ont) => {
-      if (typeof ont.latitude !== 'number' || typeof ont.longitude !== 'number' || isNaN(ont.latitude) || isNaN(ont.longitude)) {
-        skipped++;
-        return;
-      }
-      let onColor, offColor;
-      if (ont.Icon === 119) {
-        onColor = "#3498db";
-        offColor = "#e74c3c";
-      } else if (ont.Icon === 155) {
-        onColor = "#27ae60";
-        offColor = "#ff6b35";
-      } else {
-        onColor = "#27ae60";
-        offColor = "#e74c3c";
       }
 
-      const isOnline = ont.status.startsWith("ON");
-      const color = isOnline ? onColor : offColor;
-      const iconHtml = `<div style="background-color:${color};width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.2);color:#ffffff;font-size:1rem;"><i class="fas fa-wifi"></i></div>`;
-      const icon = L.divIcon({
-        html: iconHtml,
-        iconSize: [24, 24],
-        className: "",
-      });
-      const marker = L.marker([ont.latitude, ont.longitude], { icon });
-
-      let popupContent = `<b>${ont.name}</b>`;
-      if (ont.lokasi)
-        popupContent += `<br><span style='font-size: 0.9em; color: #aaa;'>${ont.lokasi}</span>`;
-      popupContent += `<br>IP: <a href='http://${ont.ip}' target='_blank' style='color:#3498db;'>${ont.ip}</a>`;
-      popupContent += `<br>Status: <span style='color:${color};'>${ont.status}</span>`;
-      marker.bindPopup(popupContent);
-
-      marker.on("mouseover", function (e) {
-        this.openPopup();
-      });
-      marker.on("mouseout", function (e) {
-        this.closePopup();
-      });
-      marker.addTo(markers);
-
-      if (
-        lastStatus[ont.id] !== undefined &&
-        lastStatus[ont.id] !== isOnline
-      ) {
-        applySonarEffect(marker, color);
+      function getMikrotikUserCount() {
+        fetch("/api/history")
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.length > 0) {
+              const userCount = data[data.length - 1].users;
+              document.getElementById("stat-users").querySelector(".value").textContent = userCount;
+              document.getElementById("header-users-count").textContent = userCount;
+            } else {
+              document.getElementById("stat-users").querySelector(".value").textContent = "0";
+              document.getElementById("header-users-count").textContent = "0";
+            }
+          })
+          .catch((err) => {
+            console.error('Error fetching history:', err);
+          });
       }
-      lastStatus[ont.id] = isOnline;
-    });
-    map.addLayer(markers);
-    if (skipped > 0) console.warn(`Skipped ${skipped} ONT(s) without valid coordinates`);
-  }
 
-  function loadAllData() {
-    fetch("/api/onts")
-      .then((res) => res.json())
-      .then((data) => {
-        allOntData = data;
-        updateStats(data);
-        renderMarkers(data.filter(ont => typeof ont.latitude === 'number' && typeof ont.longitude === 'number'));
+      function applySonarEffect(marker, color) {
+        const iconDiv = marker._icon;
+        if (iconDiv) {
+          iconDiv.style.color = color;
+          iconDiv.classList.add("sonar-ping-emitter");
+          setTimeout(() => {
+            if (iconDiv) iconDiv.classList.remove("sonar-ping-emitter");
+          }, 3000);
+        }
+      }
 
-        const coordinates = data.map((ont) => [ont.latitude, ont.longitude]).filter(coord => !isNaN(coord[0]) && !isNaN(coord[1]));
-        if (coordinates.length > 0) {
-          const bounds = L.latLngBounds(coordinates);
-          // Hanya auto-fit saat first load atau bila autoFitEnabled = true
-          if (isFirstLoad || autoFitEnabled) {
-            map.fitBounds(bounds, { padding: [50, 50] });
-            isFirstLoad = false;
-          } else {
-            // tidak melakukan fitBounds agar tidak override view user
-            // (kemungkinan kita bisa debug/log di sini jika perlu)
+      function renderMarkers(onts) {
+        markers.clearLayers();
+        let skipped = 0;
+        onts.forEach((ont) => {
+          if (typeof ont.latitude !== 'number' || typeof ont.longitude !== 'number' || isNaN(ont.latitude) || isNaN(ont.longitude)) {
+            skipped++;
+            return;
           }
-        }
-      })
-      .catch(err => {
-        console.error('Error loading ONTs:', err);
-      });
-    getMikrotikUserCount();
-  }
+          let onColor, offColor;
+          // Menggunakan variabel CSS untuk konsistensi
+          onColor = 'var(--success-color)'; 
+          offColor = 'var(--danger-color)';
 
-  document.getElementById("searchONT").addEventListener("input", function (e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const filteredOnts = allOntData.filter(
-      (ont) =>
-        (ont.name && ont.name.toLowerCase().includes(searchTerm)) ||
-        (ont.lokasi && ont.lokasi.toLowerCase().includes(searchTerm))
-    );
-    renderMarkers(filteredOnts);
-  });
+          const isOnline = ont.status.startsWith("ON");
+          const color = isOnline ? onColor : offColor;
+          const iconHtml = `<div style="background-color:${color};width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.2);color:#ffffff;font-size:1rem;"><i class="fas fa-wifi"></i></div>`;
+          const icon = L.divIcon({
+            html: iconHtml,
+            iconSize: [24, 24],
+            className: "",
+            iconAnchor: [12, 12] /* Sesuaikan anchor agar center */
+          });
+          const marker = L.marker([ont.latitude, ont.longitude], { icon });
 
-  loadAllData();
-  setInterval(loadAllData, 5000);
+          let popupContent = `<b>${ont.name}</b>`;
+          if (ont.lokasi)
+            popupContent += `<br><span style='font-size: 0.9em; color: var(--text-light);'>${ont.lokasi}</span>`; /* Menggunakan variabel CSS */
+          popupContent += `<br>IP: <a href='http://${ont.ip}' target='_blank' style='color:var(--primary-color);'>${ont.ip}</a>`; /* Menggunakan variabel CSS */
+          popupContent += `<br>Status: <span style='color:${color};'>${ont.status}</span>`;
+          marker.bindPopup(popupContent);
 
-  // --- SCRIPT BARU UNTUK FUNGSI BUKA-TUTUP DENGAN LOCALSTORAGE ---
-  document.addEventListener("DOMContentLoaded", function () {
-    const toggleButton = document.getElementById("toggle-sidebar-btn");
+          marker.on("mouseover", function (e) {
+            this.openPopup();
+          });
+          marker.on("mouseout", function (e) {
+            this.closePopup();
+          });
+          marker.addTo(markers);
 
-    if (localStorage.getItem("sidebar") === "expanded") {
-      document.body.classList.remove("sidebar-collapsed");
-    }
-
-    toggleButton.addEventListener("click", function () {
-      document.body.classList.toggle("sidebar-collapsed");
-
-      if (document.body.classList.contains("sidebar-collapsed")) {
-        localStorage.setItem("sidebar", "collapsed");
-      } else {
-        localStorage.setItem("sidebar", "expanded");
+          if (
+            lastStatus[ont.id] !== undefined &&
+            lastStatus[ont.id] !== isOnline
+          ) {
+            applySonarEffect(marker, color);
+          }
+          lastStatus[ont.id] = isOnline;
+        });
+        map.addLayer(markers);
+        if (skipped > 0) console.warn(`Skipped ${skipped} ONT(s) without valid coordinates`);
       }
 
-      setTimeout(function () {
-        map.invalidateSize();
-      }, 350);
-    });
-  });
+      function loadAllData() {
+        fetch("/api/onts")
+          .then((res) => res.json())
+          .then((data) => {
+            allOntData = data;
+            updateStats(data);
+            renderMarkers(data.filter(ont => typeof ont.latitude === 'number' && typeof ont.longitude === 'number'));
 
-  // === Custom Control Legenda di Peta ===
-  L.Control.LegendCustom = L.Control.extend({
-    onAdd: function (map) {
-      let div = L.DomUtil.create("div", "leaflet-control-custom");
-      div.innerHTML = `
-        <div style="font-size:12px; line-height:1.4;">
-          <b>Legenda</b><br>
-          <span style="color:#27ae60;">●</span> ONT Online<br>
-          <span style="color:#ff6b35;">●</span> ONT Offline<br>
-        </div>
-      `;
-      return div;
-    },
-    onRemove: function (map) {},
-  });
+            const coordinates = data.map((ont) => [ont.latitude, ont.longitude]).filter(coord => !isNaN(coord[0]) && !isNaN(coord[1]));
+            if (coordinates.length > 0) {
+              const bounds = L.latLngBounds(coordinates);
+              // Hanya auto-fit saat first load atau bila autoFitEnabled = true
+              if (isFirstLoad || autoFitEnabled) {
+                map.fitBounds(bounds, { padding: [50, 50] });
+                isFirstLoad = false;
+              } else {
+                // tidak melakukan fitBounds agar tidak override view user
+                // (kemungkinan kita bisa debug/log di sini jika perlu)
+              }
+            }
+          })
+          .catch((err) => {
+            console.error('Error loading ONTs:', err);
+          });
+        getMikrotikUserCount();
+      }
 
-  // === Custom Control: Fit Area ===
-  L.Control.FitArea = L.Control.extend({
-    onAdd: function (map) {
-      let container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
-      let button = L.DomUtil.create("a", "", container);
-      button.innerHTML = '<i class="fas fa-expand-arrows-alt"></i>';
-      button.href = "#";
-      button.title = "Fit ke Semua Marker";
-
-      L.DomEvent.on(button, "click", function (e) {
-        L.DomEvent.stopPropagation(e);
-        L.DomEvent.preventDefault(e);
-
-        if (typeof markers !== "undefined" && markers.getLayers().length > 0) {
-          let group = L.featureGroup(markers.getLayers());
-          map.fitBounds(group.getBounds().pad(0));
-          // Setelah user klik Fit Area, kita nonaktifkan auto-fit sementara agar view tidak di-override
-          disableAutoFitTemporarily();
-        } else {
-          alert("Tidak ada marker untuk difit.");
-        }
+      document.getElementById("searchONT").addEventListener("input", function (e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredOnts = allOntData.filter(
+          (ont) =>
+            (ont.name && ont.name.toLowerCase().includes(searchTerm)) ||
+            (ont.lokasi && ont.lokasi.toLowerCase().includes(searchTerm))
+        );
+        renderMarkers(filteredOnts);
       });
 
-      return container;
-    },
-    onRemove: function (map) {},
-  });
+      loadAllData();
+      setInterval(loadAllData, 5000);
 
-  // === Tambahkan Legenda & Fit Area ke Peta ===
-  document.addEventListener("DOMContentLoaded", function () {
-    if (typeof map !== "undefined") {
-      new L.Control.FitArea({ position: "topleft" }).addTo(map);
-      new L.Control.LegendCustom({ position: "bottomleft" }).addTo(map);
-    }
-  });
-</script>
+      // --- SCRIPT BARU UNTUK FUNGSI BUKA-TUTUP DENGAN LOCALSTORAGE ---
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggle-sidebar-btn");
+
+        if (localStorage.getItem("sidebar") === "expanded") {
+          document.body.classList.remove("sidebar-collapsed");
+        }
+
+        toggleButton.addEventListener("click", function () {
+          document.body.classList.toggle("sidebar-collapsed");
+
+          if (document.body.classList.contains("sidebar-collapsed")) {
+            localStorage.setItem("sidebar", "collapsed");
+          } else {
+            localStorage.setItem("sidebar", "expanded");
+          }
+
+          setTimeout(function () {
+            map.invalidateSize();
+          }, 350);
+        });
+      });
+
+      // === Custom Control Legenda di Peta ===
+      L.Control.LegendCustom = L.Control.extend({
+        onAdd: function (map) {
+          let div = L.DomUtil.create("div", "leaflet-control-custom");
+          div.innerHTML = `
+            <div style="font-size:12px; line-height:1.4; font-family: 'Poppins', sans-serif;">
+              <b>Legenda</b><br>
+              <span style="color:var(--success-color);">●</span> ONT Online<br>
+              <span style="color:var(--danger-color);">●</span> ONT Offline<br>
+            </div>
+          `;
+          return div;
+        },
+        onRemove: function (map) {},
+      });
+
+      // === Custom Control: Fit Area ===
+      L.Control.FitArea = L.Control.extend({
+        onAdd: function (map) {
+          let container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+          let button = L.DomUtil.create("a", "", container);
+          button.innerHTML = '<i class="fas fa-expand-arrows-alt"></i>';
+          button.href = "#";
+          button.title = "Pusatkan Peta ke Semua Marker";
+
+          L.DomEvent.on(button, "click", function (e) {
+            L.DomEvent.stopPropagation(e);
+            L.DomEvent.preventDefault(e);
+
+            if (typeof markers !== "undefined" && markers.getLayers().length > 0) {
+              let group = L.featureGroup(markers.getLayers());
+              map.fitBounds(group.getBounds().pad(0));
+              // Setelah user klik Fit Area, kita nonaktifkan auto-fit sementara agar view tidak di-override
+              disableAutoFitTemporarily();
+            } else {
+              alert("Tidak ada marker untuk difit.");
+            }
+          });
+
+          return container;
+        },
+        onRemove: function (map) {},
+      });
+
+      // === Tambahkan Legenda & Fit Area ke Peta ===
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof map !== "undefined") {
+          new L.Control.FitArea({ position: "topleft" }).addTo(map);
+          new L.Control.LegendCustom({ position: "bottomleft" }).addTo(map);
+        }
+      });
+    </script>
   </body>
 </html>
