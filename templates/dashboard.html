@@ -163,7 +163,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem; /* Menambah ruang untuk sumbu Y sticky */
+            margin-bottom: 1.5rem;
         }
         .chart-header h2 {
             color: var(--text-dark);
@@ -171,7 +171,7 @@
             font-size: 1.4rem;
         }
         
-        /* === STICKY AXIS STYLES (BARU) === */
+        /* === STICKY AXIS STYLES === */
         .chart-sticky-container {
             position: relative;
         }
@@ -180,22 +180,36 @@
             left: 0;
             top: 0;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.95); /* Sama dengan latar chart */
+            background-color: rgba(255, 255, 255, 0.95);
             z-index: 10;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             padding-right: 10px;
+            box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
         }
         .sticky-y-axis-label {
-            color: #6c757d; /* Warna dari label chart */
-            font-size: 12px; /* Ukuran dari label chart */
+            color: #6c757d;
+            font-size: 12px;
             font-family: 'Poppins', sans-serif;
             text-align: right;
+            white-space: nowrap; /* Mencegah teks patah */
+        }
+        /* Style baru untuk judul sumbu Y (BARU) */
+        .sticky-y-axis-title {
+            position: absolute;
+            top: 50%;
+            left: -20px; /* Sesuaikan posisi horizontal agar terlihat */
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: left center; /* Rotasi dari tengah-kiri */
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+            z-index: 11; /* Pastikan di atas label angka */
         }
         .chart-wrapper {
             overflow-x: auto;
-            /* Tambahkan margin kiri untuk memberi ruang bagi sumbu Y sticky */
         }
         .chart-canvas-container { height: 350px; }
 
@@ -319,14 +333,20 @@
 
             // Ambil data dan posisi dari chart yang sudah ada
             const yTicks = chart.scales.y.ticks;
-            const chartArea = chart.chartArea;
-
-            // Atur lebar sumbu Y sticky sama dengan sumbu Y asli
-            const yAxisWidth = chart.scales.y.width;
+            
+            // Tentukan lebar minimum agar judul sumbu Y bisa masuk
+            const yAxisWidth = Math.max(chart.scales.y.width, 50); // Minimal 50px untuk judul
             yAxisEl.style.width = `${yAxisWidth}px`;
             
             // Beri margin pada wrapper chart agar tidak tertutup sumbu Y sticky
-            document.querySelector('.chart-wrapper').style.marginLeft = `${yAxisWidth}px`;
+            // Margin disesuaikan dengan lebar yAxisEl agar grafik tidak tumpang tindih
+            document.querySelector('.chart-wrapper').style.marginLeft = `${yAxisWidth + 10}px`; // +10px untuk sedikit ruang
+            
+            // Tambahkan judul sumbu Y (BARU)
+            const yAxisTitle = document.createElement('div');
+            yAxisTitle.className = 'sticky-y-axis-title';
+            yAxisTitle.textContent = 'Jumlah User';
+            yAxisEl.appendChild(yAxisTitle);
 
             // Buat label untuk setiap angka di sumbu Y
             yTicks.forEach((tick, index) => {
@@ -348,10 +368,11 @@
 
             // Sembunyikan sumbu Y asli pada chart utama
             chart.options.scales.y.ticks.display = false;
+            chart.options.scales.y.title.display = false; // Sembunyikan judul sumbu Y asli
             chart.update();
         }
 
-        function loadStats() { /* Fungsi ini tetap sama */
+        function loadStats() {
             fetch('/api/onts').then(res => res.json()).then(data => {
                 document.getElementById('total-onts').textContent = data.length;
                 const onlineCount = data.filter(ont => ont.status === 'ON').length;
@@ -367,7 +388,7 @@
             });
         }
 
-        function updateChartScale(chart) { /* Fungsi ini tetap sama */
+        function updateChartScale(chart) {
             const data = chart.data.datasets[0].data;
             if (data.length < 2) {
                 chart.options.scales.y.min = 0;
@@ -384,7 +405,7 @@
             chart.options.scales.y.max = Math.ceil(maxValue + padding);
         }
 
-        function formatTimestamp(isoString) { /* Fungsi ini tetap sama */
+        function formatTimestamp(isoString) {
             const date = new Date(isoString);
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -393,7 +414,7 @@
             return `${day}/${month} ${hours}:${minutes}`;
         }
 
-        function addNewDataPoint() { /* Fungsi ini tetap sama */
+        function addNewDataPoint() {
             fetch('/api/history').then(res => res.json()).then(data => {
                 if (data.length > 0) {
                     const latestRecord = data[data.length - 1];
@@ -434,7 +455,7 @@
             const userData = initialData.map(d => d.users);
             const fullTimestamps = initialData.map(d => d.timestamp);
             
-            const verticalDayBands = { /* Plugin ini tetap sama */
+            const verticalDayBands = {
                 id: 'verticalDayBands',
                 beforeDraw(chart) {
                     const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
@@ -484,11 +505,15 @@
                     fullTimestamps: fullTimestamps,
                     scales: { 
                         y: { 
-                            title: { display: false },
+                            title: { 
+                                display: true, // Biarkan display true agar Chart.js menghitung lebar sumbu Y
+                                text: 'Jumlah User', // Teks ini akan disembunyikan dan digantikan oleh sticky label
+                                font: { family: 'Poppins', size: 14, weight: '600' },
+                                color: 'var(--text-dark)'
+                            },
                             grid: { color: 'rgba(0,0,0,0.05)' },
                             ticks: { 
                                 font: { family: 'Poppins' },
-                                // Tampilkan sumbu Y asli saat pertama kali render untuk dibaca oleh fungsi sticky
                                 display: true 
                             }
                         },
@@ -509,8 +534,6 @@
                 plugins: [verticalDayBands]
             });
 
-            // Panggil fungsi untuk membuat sumbu Y sticky setelah chart pertama kali dibuat
-            // Timeout kecil untuk memastikan chart selesai render sebelum dibaca
             setTimeout(() => {
                 updateChartScale(userHistoryLineChart);
                 userHistoryLineChart.update();
@@ -528,7 +551,7 @@
             setInterval(addNewDataPoint, 20000);
         });
 
-        function showActiveUsers() { /* Fungsi ini tetap sama */
+        function showActiveUsers() {
             const myModal = new bootstrap.Modal(document.getElementById('activeUsersModal'));
             const tableBody = document.getElementById('activeUsersTableBody');
             myModal.show();
