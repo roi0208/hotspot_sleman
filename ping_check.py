@@ -11,10 +11,10 @@ except Exception:
     ROUTEROS_AVAILABLE = False
     print("⚠️  Warning: 'routeros_api' module not installed — MikroTik features will be disabled.")
 
-MIKROTIK_IP = '111.92.166.184'
-MIKROTIK_PORT = 8728
-MIKROTIK_USER = 'monitor'
-MIKROTIK_PASS = 's0t0kudus'
+MIKROTIK_IP = '202.169.224.15'
+MIKROTIK_PORT = 1500
+MIKROTIK_USER = 'cleon'
+MIKROTIK_PASS = 'cleon'
 
 FLASK_SERVER_URL = 'http://127.0.0.1:5000'
 PING_INTERVAL = 30
@@ -53,7 +53,7 @@ def get_mikrotik_hotspot_active_count():
             plaintext_login=True
         )
         api = connection.get_api()
-        active_users_list = api.get_resource('/ip/hotspot/active').get()
+        active_users_list = api.get_resource('/ip/hotspot/active').get(server='hs-bridge-csr-sleman')
         user_count = len(active_users_list)
         connection.disconnect()
         return user_count
@@ -79,7 +79,7 @@ def get_mikrotik_active_users_detail():
         api = connection.get_api()
         
         # Mengambil seluruh daftar user aktif beserta detailnya
-        active_users_list = api.get_resource('/ip/hotspot/active').get()
+        active_users_list = api.get_resource('/ip/hotspot/active').get(server='hs-bridge-csr-sleman')
         connection.disconnect()
         
         # Membersihkan data, hanya mengambil yang penting untuk log
